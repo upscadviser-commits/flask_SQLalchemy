@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify, make_response
 from flask_migrate import Migrate
 from marshmallow import ValidationError
@@ -10,8 +11,11 @@ from schemas import (
     ExerciseWithWorkoutsSchema
 )
 
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+DATABASE_PATH = os.path.join(BASE_DIR, "instance", "app.db")
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATABASE_PATH}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 migrate = Migrate(app, db)
