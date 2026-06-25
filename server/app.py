@@ -34,7 +34,7 @@ def get_workouts():
 
 @app.route('/workouts/<int:id>', methods=['GET'])
 def get_workout_by_id(id):
-    workout = Workout.query.get(id)
+    workout = db.session.get(Workout, id)
     if not workout:
         return make_response(jsonify({"error": "Workout not found"}), 404)
     return make_response(jsonify(workout_schema.dump(workout)), 200)
@@ -65,7 +65,7 @@ def create_workout():
 
 @app.route('/workouts/<int:id>', methods=['DELETE'])
 def delete_workout(id):
-    workout = Workout.query.get(id)
+    workout = db.session.get(Workout, id)
     if not workout:
         return make_response(jsonify({"error": "Workout not found"}), 404)
     
@@ -85,7 +85,7 @@ def get_exercises():
 
 @app.route('/exercises/<int:id>', methods=['GET'])
 def get_exercise_by_id(id):
-    exercise = Exercise.query.get(id)
+    exercise = db.session.get(Exercise, id)
     if not exercise:
         return make_response(jsonify({"error": "Exercise not found"}), 404)
     return make_response(jsonify(exercise_with_workouts_schema.dump(exercise)), 200)
@@ -116,7 +116,7 @@ def create_exercise():
 
 @app.route('/exercises/<int:id>', methods=['DELETE'])
 def delete_exercise(id):
-    exercise = Exercise.query.get(id)
+    exercise = db.session.get(Exercise, id)
     if not exercise:
         return make_response(jsonify({"error": "Exercise not found"}), 404)
     
@@ -131,10 +131,10 @@ def delete_exercise(id):
 
 @app.route('/workouts/<int:workout_id>/exercises/<int:exercise_id>/workout_exercises', methods=['POST'])
 def add_exercise_to_workout(workout_id, exercise_id):
-    workout = Workout.query.get(workout_id)
+    workout = db.session.get(Workout, workout_id)
     if not workout:
         return make_response(jsonify({"error": "Workout not found"}), 404)
-    exercise = Exercise.query.get(exercise_id)
+    exercise = db.session.get(Exercise, exercise_id)
     if not exercise:
         return make_response(jsonify({"error": "Exercise not found"}), 404)
     
